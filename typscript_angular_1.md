@@ -242,6 +242,190 @@ export class AppModule { }
 - Most viszont a klasszikus modul struktúra szerint dolgozol, ezért a fenti lépéseket kövesd!
 
 ---
+## For ciklus HTML-ben – *ngFor használata Angularban
 
+Az Angular **strukturális direktívákat** kínál a sablonban (HTML-ben) történő ciklikus megjelenítéshez. A leggyakoribb példa a **`*ngFor`**:
+
+### Példa használat:
+
+```html
+<p>{{ item }}</p>
+```
+
+- **Mit jelent ez?**
+    - Az `increments` egy tömb a komponens TypeScript fájljában.
+    - A sor minden egyes eleméhez (item) létrejön egy `<p>`, amelyben a sablonban az adott elem értéke jelenik meg.
+
+
+### Részletesebb példa:
+
+#### TypeScript fájl (app.component.ts):
+
+```typescript
+export class AppComponent {
+  increments = [1, 2, 3, 4, 5];
+}
+```
+
+
+#### HTML (app.component.html):
+
+```html
+</p><p>{{ item }}</p>
+```
+
+
+#### Eredmény:
+
+```
+1
+2
+3
+4
+5
+```
+
+
+### Fontosabb tudnivalók az *ngFor-ról
+
+- Mindig **`*ngFor`** (csillaggal), mert strukturális direktíva!
+- A sablonban az **`let item of lista`** szintaxist használjuk, ahol `item` az aktuális elem, `lista` pedig a bejárni kívánt tömb.
+- További index kezelésére is van lehetőség:
+
+```html
+<li>
+  #{{ i }}: {{ elem }}
+</li>
+```
+
+
+---
+
+## Konstruktor szerepe komponensben
+
+- Az Angular komponens TypeScript osztályának **konstruktorában** (constructor) inicializálhatod az adatokat, például alapértékeket adhatsz egy tömbhöz:
+
+```typescript
+export class AppComponent {
+  increments: number[] = [];
+
+  constructor() {
+    this.increments.push(1, 2, 3, 4, 5);
+  }
+}
+```
+
+- A konstruktor **fő szerepe**: a komponens létrejöttekor (példányosításakor) egyszer fut le, így alkalmas kezdőértékek beállítására, szolgáltatások (service-ek) injektálására stb.
+
+---
+
+## `*ngIf` – Feltételes megjelenítés Angularban
+
+- Az **`*ngIf`** strukturális direktíva feltételhez köti egy HTML elem megjelenítését.
+
+
+### Alapszintaxisa:
+
+```html
+<p>Ez akkor látszik, ha a 'visible' igaz!</p>
+```
+
+- Csak akkor jelenik meg a `<p>`, ha a komponensben a **`visible`** változó értéke true.
+
+
+### Példa logika a komponensben:
+
+```typescript
+export class AppComponent {
+  visible = true;
+}
+```
+
+
+### Ágak kezelése (`else`):
+
+- *ngIf-else* eset:
+
+```html
+</p><div>
+  Hiba történt!
+</div>
+&lt;ng-template #mindenOk&gt;
+  Minden rendben.
+&lt;/ng-template&gt;
+```
+
+- Az `&lt;ng-template&gt;` blokk az else ág.
+
+---
+
+## `ngClass` – Dinamikus osztály (class) kezelés Angularban
+
+Az **`[ngClass]`** direktíva lehetővé teszi, hogy egy elemhez dinamikusan adj többféle CSS osztályt (class-t) Angularban, feltételek alapján.
+
+### Alapszintaxisa:
+
+```html
+<div>
+  Dinamikus class-váltás példa
+</div>
+```
+
+- **`bigger`** osztály akkor lesz ráadva, ha az `isBig` változó true.
+- **`smaller`** osztály akkor, ha az `isBig` false.
+
+
+### Példakód teljesen:
+
+#### app.component.ts
+
+```typescript
+export class AppComponent {
+  isBig = true;
+}
+```
+
+
+#### app.component.html
+
+```html
+<div>
+  Ez a szöveg vagy nagyobb, vagy kisebb stílust kap!
+</div>
+&lt;button (click)="isBig = !isBig"&gt;Vált&lt;/button&gt;
+```
+
+
+#### app.component.scss
+
+```scss
+.bigger {
+  font-size: 2rem;
+  color: green;
+}
+.smaller {
+  font-size: 1rem;
+  color: red;
+}
+```
+
+
+### További lehetőségek
+
+- Több osztály adásához is használhatsz tömböt:
+
+```html
+<div></div>
+```
+
+- Egyedi logika alapján object vagy függvény is visszaadhatja az osztályokat.
+
+---
+
+### Röviden:
+
+- **[ngClass]** – Egy elem CSS osztályainak dinamikus, feltételes beállítása Angular komponens változói/logikája alapján.
+
+---
 
 
