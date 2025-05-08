@@ -491,4 +491,89 @@ constructor(private szolgaltatas: SzolgaltatasNeveService) { }
 - Service-ekkel közös logikát, állapotot, adatokat tudsz megosztani az alkalmazásod különböző részei között.
 
 ---
+## Angular CLI – Projekt és komponensek létrehozása
 
+Az **Angular CLI** (Command Line Interface) egy parancssoros eszköz, amellyel gyorsan, egységes szerkezetben hozhatsz létre új Angular projekteket és komponenseket.
+
+### Új projekt indítása
+
+```bash
+ng new devcrud --standalone=false --skip-tests --style=sass --ssr=false
+```
+
+- Ez létrehoz egy új projektet `devcrud` néven, klasszikus modulrendszerrel, tesztek nélkül, Sass stílusokkal.
+
+
+### Komponensek és osztály generálása
+
+```bash
+cd devcrud
+ng g class developer --skip-tests
+ng g c create --skip-tests
+ng g c list --skip-tests
+ng g c edit --skip-tests
+```
+
+- Ezek a parancsok létrehozzák a `developer` osztályt, valamint a `create`, `list`, `edit` komponenseket a `src/app/` mappában.
+- Minden komponenshez három fő fájl jön létre: `.ts` (logika), `.html` (sablon), `.scss` (stílus).
+- A CLI automatikusan hozzáadja a komponenst az `app.module.ts`-hez.
+
+
+### Fejlesztői szerver indítása
+
+```bash
+ng serve
+```
+
+- Ezzel buildeli a projektet és elindítja a helyi szervert, általában a `http://localhost:4200` címen.
+
+---
+
+## Angular Router – Útvonalak és navigáció
+
+Az **Angular Router** lehetővé teszi, hogy különböző komponensekhez különböző URL-eket rendelj.
+
+### Útvonalak beállítása
+
+Az útvonalakat az `src/app/app-routing.module.ts` fájlban kell konfigurálni:
+
+```typescript
+// src/app/app-routing.module.ts
+const routes: Routes = [
+  { path: '', redirectTo: 'list', pathMatch: 'full' },
+  { path: 'list', component: ListComponent },
+  { path: 'create', component: CreateComponent },
+  { path: 'edit/:id', component: EditComponent },
+  { path: 'delete', component: DeleteComponent },
+  { path: '**', redirectTo: 'list', pathMatch: 'full' }
+];
+```
+
+- Minden útvonalhoz hozzárendeled a megfelelő komponenst.
+- A `router-outlet` direktíva helyén jelenik meg az aktuális oldal tartalma.
+
+
+### Egyszerű navigáció a sablonban
+
+A navigációs sávhoz (pl. `src/app/nav/nav.component.html`):
+
+```html
+<a routerLink="/list">Listázás</a>
+<a routerLink="/create">Létrehozás</a>
+<a routerLink="/delete">Törlés</a>
+```
+
+
+### Fő sablon szerkezet
+
+A főoldal sablonjában (`src/app/app.component.html`):
+
+```html
+<app-nav></app-nav>
+<router-outlet></router-outlet>
+<app-footer></app-footer>
+```
+
+- A `<router-outlet>` helyén jelenik meg mindig az aktuális route-hoz tartozó komponens.
+
+---
