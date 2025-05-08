@@ -592,21 +592,21 @@ Az Angular **change detection** rendszere és **életciklus hook**-jai közvetle
 
 | Szempont | `alma()` metódus | `get alma()` getter |
 | :-- | :-- | :-- |
-| **Hívási gyakoriság** | Minden változásdetekciós ciklusban lefut[^4][^7] | Csak akkor, ha a getter függőségei változnak[^4][^10] |
-| **Teljesítmény** | Potenciálisan lassabb (felesleges hívások)[^4][^7] | Hatékonyabb, ha függőségek változnak ritkán[^4][^10] |
-| **Változásészlelés** | Angular nem követi a metódus függőségeit[^4] | Angular automatikusan kezeli a getter függőségeit[^10][^12] |
+| **Hívási gyakoriság** | Minden változásdetekciós ciklusban lefut | Csak akkor, ha a getter függőségei változnak |
+| **Teljesítmény** | Potenciálisan lassabb (felesleges hívások) | Hatékonyabb, ha függőségek változnak ritkán |
+| **Változásészlelés** | Angular nem követi a metódus függőségeit | Angular automatikusan kezeli a getter függőségeit |
 | **Példa** | `{{ alma() }}` | `{{ alma }}` |
 
 ### 3. Kétirányú adatkötés kapcsolat
 
-- A **[(ngModel)]** kétirányú kötés mögött `@Input()` és `@Output()` dekorátorok vannak, amelyek a change detection rendszert aktiválják[^6][^11][^13].
-- Ha getter/setter-t használsz `@Input()` property-ként, a **ngOnChanges** nem fog jelezni változást, hacsak explicit nem frissíted a referenciát[^8][^14].
+- A **[(ngModel)]** kétirányú kötés mögött `@Input()` és `@Output()` dekorátorok vannak, amelyek a change detection rendszert aktiválják.
+- Ha getter/setter-t használsz `@Input()` property-ként, a **ngOnChanges** nem fog jelezni változást, hacsak explicit nem frissíted a referenciát.
 
 
 ### 4. Ajánlott gyakorlat
 
-- **Getterek** használata előnyösebb, ha a számítás költséges, vagy ha a template-ben gyakran hivatkoznak rá[^4][^7][^10].
-- **Metódusok** kerülendők template kifejezésekben, kivéve, ha tudod, hogy ritkán változnak a függőségeik[^4][^7].
+- **Getterek** használata előnyösebb, ha a számítás költséges, vagy ha a template-ben gyakran hivatkoznak rá.
+- **Metódusok** kerülendők template kifejezésekben, kivéve, ha tudod, hogy ritkán változnak a függőségeik.
 
 **Példa problémára:** Ha egy metódus minden ciklusban új objektumot ad vissza, `ExpressionChangedAfterItHasBeenCheckedError` hibát okozhat[^4]. Getter esetén ez csak akkor fordul elő, ha a belső állapot nem megfelelően kezelt.
 
