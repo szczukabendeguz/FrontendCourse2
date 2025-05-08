@@ -427,5 +427,68 @@ export class AppComponent {
 - **[ngClass]** – Egy elem CSS osztályainak dinamikus, feltételes beállítása Angular komponens változói/logikája alapján.
 
 ---
+## Angular Service-ek
 
+### Mi az a service Angularban?
+
+Az Angularban a **service** (szolgáltatás) egy újrafelhasználható TypeScript osztály, amely logikát, adatokat vagy funkcionalitást (pl. API-hívásokat, állapotkezelést) biztosít több komponens számára. A service-ek célja, hogy a közös logikát ne komponensekben, hanem különálló, könnyen tesztelhető és karbantartható egységekben tartsuk.
+
+### Dependency Injection (DI) Angularban
+
+Az Angular egyik alapelve a **dependency injection** (függőséginjektálás): a komponensek vagy más service-ek nem maguk hozzák létre a szükséges objektumokat, hanem az Angular injector rendszere „injektálja” (adja oda) nekik azokat. Ez lehetővé teszi a laza csatolást, könnyebb tesztelhetőséget és újrafelhasználhatóságot[^4][^7].
+
+### Singleton service – Mit jelent ez?
+
+Alapértelmezés szerint az Angular service-ek **singleton** módon működnek: az alkalmazás életciklusa alatt csak egy példány jön létre belőlük, és ezt az egy példányt kapja meg minden komponens vagy más service, amelyik igényli. Ez azt jelenti, hogy a service által tárolt állapot vagy logika mindenhol ugyanaz marad – például egy bejelentkezett felhasználó adatai, cache-elt API válaszok, stb.[^5][^7].
+
+#### Singleton service előnyei:
+
+- **Állapot megosztás**: Minden komponens ugyanazt az adatot látja.
+- **Memóriahatékonyság**: Nem jön létre feleslegesen több példány.
+- **Központi logika**: Pl. autentikáció, naplózás, API-hívások, stb.
+
+
+### Hogyan hozol létre service-t Angularban?
+
+A legegyszerűbb módja a service generálásának az Angular CLI használata:
+
+```bash
+ng g service szolgaltatas-neve
+```
+
+Ez létrehoz egy új service-t a `src/app` mappában, pl. `szolgaltatas-neve.service.ts` néven[^3].
+
+#### Példa generált service-re:
+
+```typescript
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root' // így lesz singleton az egész alkalmazásban!
+})
+export class SzolgaltatasNeveService {
+  constructor() { }
+}
+```
+
+A `providedIn: 'root'` beállítás azt mondja az Angularnak, hogy a service singletonként, az egész alkalmazás szintjén legyen elérhető[^2][^5][^7].
+
+### Hogyan működik a dependency injection?
+
+- Ha egy komponens vagy más service konstruktorában megadod a service típusát, az Angular automatikusan beadja a példányt:
+
+```typescript
+constructor(private szolgaltatas: SzolgaltatasNeveService) { }
+```
+
+- Bármelyik komponensben, ahol így hivatkozol rá, ugyanazt a példányt kapod vissza.
+
+
+### Összefoglalva
+
+- Az Angular service-ek alapból singletonok, ha a `providedIn: 'root'`-tal hozod létre őket.
+- A dependency injection automatikusan beadja a szükséges service példányt a komponensbe vagy más service-be.
+- Service-ekkel közös logikát, állapotot, adatokat tudsz megosztani az alkalmazásod különböző részei között.
+
+---
 
