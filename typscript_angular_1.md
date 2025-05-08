@@ -435,11 +435,11 @@ Az Angularban a **service** (szolgáltatás) egy újrafelhasználható TypeScrip
 
 ### Dependency Injection (DI) Angularban
 
-Az Angular egyik alapelve a **dependency injection** (függőséginjektálás): a komponensek vagy más service-ek nem maguk hozzák létre a szükséges objektumokat, hanem az Angular injector rendszere „injektálja” (adja oda) nekik azokat. Ez lehetővé teszi a laza csatolást, könnyebb tesztelhetőséget és újrafelhasználhatóságot[^4][^7].
+Az Angular egyik alapelve a **dependency injection** (függőséginjektálás): a komponensek vagy más service-ek nem maguk hozzák létre a szükséges objektumokat, hanem az Angular injector rendszere „injektálja” (adja oda) nekik azokat. Ez lehetővé teszi a laza csatolást, könnyebb tesztelhetőséget és újrafelhasználhatóságot.
 
 ### Singleton service – Mit jelent ez?
 
-Alapértelmezés szerint az Angular service-ek **singleton** módon működnek: az alkalmazás életciklusa alatt csak egy példány jön létre belőlük, és ezt az egy példányt kapja meg minden komponens vagy más service, amelyik igényli. Ez azt jelenti, hogy a service által tárolt állapot vagy logika mindenhol ugyanaz marad – például egy bejelentkezett felhasználó adatai, cache-elt API válaszok, stb.[^5][^7].
+Alapértelmezés szerint az Angular service-ek **singleton** módon működnek: az alkalmazás életciklusa alatt csak egy példány jön létre belőlük, és ezt az egy példányt kapja meg minden komponens vagy más service, amelyik igényli. Ez azt jelenti, hogy a service által tárolt állapot vagy logika mindenhol ugyanaz marad – például egy bejelentkezett felhasználó adatai, cache-elt API válaszok, stb..
 
 #### Singleton service előnyei:
 
@@ -456,7 +456,7 @@ A legegyszerűbb módja a service generálásának az Angular CLI használata:
 ng g service szolgaltatas-neve
 ```
 
-Ez létrehoz egy új service-t a `src/app` mappában, pl. `szolgaltatas-neve.service.ts` néven[^3].
+Ez létrehoz egy új service-t a `src/app` mappában, pl. `szolgaltatas-neve.service.ts` néven.
 
 #### Példa generált service-re:
 
@@ -471,7 +471,7 @@ export class SzolgaltatasNeveService {
 }
 ```
 
-A `providedIn: 'root'` beállítás azt mondja az Angularnak, hogy a service singletonként, az egész alkalmazás szintjén legyen elérhető[^2][^5][^7].
+A `providedIn: 'root'` beállítás azt mondja az Angularnak, hogy a service singletonként, az egész alkalmazás szintjén legyen elérhető.
 
 ### Hogyan működik a dependency injection?
 
