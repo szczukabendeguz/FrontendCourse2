@@ -578,7 +578,7 @@ A főoldal sablonjában (`src/app/app.component.html`):
 
 ---
 
-##Az Angular **change detection** rendszere és **életciklus hook**-jai
+## Az Angular **change detection** rendszere és **életciklus hook**-jai
 
 Az Angular **change detection** rendszere és **életciklus hook**-jai közvetlenül kapcsolódnak a kétirányú adatkötés működéséhez. A különbség az `alma()` metódus és a `get alma()` getter között pedig kritikus a változások észlelésében:
 
