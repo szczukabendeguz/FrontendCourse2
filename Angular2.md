@@ -1786,22 +1786,130 @@ A `--` komment jel, így az utána lévő jelszó ellenőrzés nem fut le. Az `'
 - WAF (Web Application Firewall) alkalmazása
 - Rendszeres biztonsági audit
 
+## XSS (Cross-Site Scripting)
+
+Az XSS olyan webes sebezhetőség, ahol támadók JavaScript kódot tudnak injektálni egy weboldalba. Az így bejuttatott kártevő kód az áldozat böngészőjében fut le, így például:
+
+- Át lehet irányítani a felhasználót egy másik oldalra egy olyan linkkel, amelybe már be van építve a kártékony kód (pl. url rövidítőkkel elrejtve a szkriptet),
+- Külső domainről is lehet szkriptet betölteni, hiszen a `<script src="...">` tag engedi bármely forrást,
+- Ezekkel akár teljes, komplex JavaScript kódot is tudunk futtatni áldozat böngészőjében.
+
+**Típusai:**
+
+- Tárolt (stored) XSS: a támadó által feltöltött rosszindulatú szkriptet az oldal adatbázisa vagy fájlrendszere tárolja.
+- Visszavert (reflected) XSS: a kód például az url paraméterében érkezik, amit a szerver azonnal visszatükröz - a felhasználó kattint egy linkre, és máris lefut a JS.
+- DOM-alapú XSS: csak kliensoldalon, JavaScript DOM-manipulációban történik a kód beszúrása, pl. egy url hash részéből nyeri ki a szkriptet a page.
+
+**Veszélyek:**
+
+- Böngésző feletti teljes kontroll, más weboldalakhoz is hozzáférhet, például cookie, local storage, session lekérése
+- Felhasználói fiók ellopása, trójai program telepítése
+- Weboldalak defacelése (megjelenített tartalom átalakítása, pl. főoldal átírása, tartalom manipulációja)
 
 
+### Deface
+
+Az oldal deface-elése azt jelenti, hogy a támadó szándékosan megváltoztatja vagy "elcsúfítja" a weboldal megjelenítését, például politikai üzenetet ír ki az oldalra.
+
+### Példák URL-alapú támadásokra
+
+**XSS:**
+
+- Pl. egy link, amibe közvetlenül JS injektált paraméter van:
+`https://weboldal.hu/?search=<script>alert('XSS')</script>`
+
+**CSRF:**
+
+- Pl. egy GET kérés banki jelszóváltáshoz (itt nem JS, hanem az áldozat maga küld adatot tudtán kívül):
+`https://bank.hu/account?newpass=asd123`
+
+**Összehasonlítás:**
+
+- Az XSS-nél a linkben JS kód van, amit a böngésző lefuttat.
+- A CSRF-nél a kártékony linket előre „készíti” a támadó, és ártatlanul kattintva a felhasználó indítja el pl. a jelszóváltást.
 
 
+## CSRF (Cross-Site Request Forgery)
+
+A támadó célja, hogy rávegye az áldozatot, egy más oldalon lévő (általában beágyazott html gomb, kép, vagy script segítségével) olyan művelet elvégzésére, amit az amúgy nem szeretne (pl. banki utalás, e-mail cím módosítás stb.).
+
+- **Példa URL:** `https://bank.hu/account?newpass=asd123`
+- **Jellemző, hogy nem JS van az url-ben, hanem az áldozat számára ártatlannak tűnő url.**
 
 
+## Tesztelési eszközök
+
+A biztonsági tesztelések sokrétűek: lehet forráskódelemzés, sérülékenységkeresés, vagy automatizált teszt (npm i során pl. deprecated visszajelzés).
+
+**Komplex eszközök:**
+
+- Acunetix: automata sérülékenységvizsgálat (XSS, SQL injection, stb.)
+- Burp Suite: proxy-s, manuális és automatizált tesztelés
+- reNgine: pentest keretrendszer, riport generálás
+
+**npm i visszajelzés:**
+A függőségek telepítésekor gyakran figyelmeztet a rendszer deprecated vagy sérülékeny modulokra, ezek fejlesztői szempontból fontosak.
+
+## OWASP
+
+Az OWASP (Open Web Application Security Project) egy nonprofit szervezet, mely a webes sérülékenységek felismerésével, dokumentálásával és az elleni védelemmel foglalkozik.
+Legismertebb a Top 10 lista, amely az aktuális legsúlyosabb és leggyakoribb webes támadástípusokat sorolja fel.
+
+## Egyéb fogalmak
+
+- **OTP (One-Time Password):** Egyszer használatos jelszó, jellemzően 2FA-hoz használják.
+- **FIDO2:** Nyílt szabványú protokoll erős, jellemzően hardveres autentikációs megoldásokhoz.
+- **Proof of human:** Távoli hozzáférés esetén hardware kulcs lokális csatlakoztatása szükséges – pl. akkor is, ha valaki távolról átveszi a gép felett az irányítást, a kulcsot fizikailag ki-be kell húzni.
 
 
+## Adblock működése (technikai)
+
+- Szűrőszoftver, ami blokkolja a hirdetések betöltődését oldalbetöltéskor.
+- A böngészőbe épül be, és egy lista alapján letilt bizonyos doménneveket, szkripteket, képeket, iframe-eket.
+- Gyakran használ reguláris kifejezéseket vagy szabálylistákat (EasyList, stb.).
+- Technológiailag a kérések/források interception-jét végzi (pl. webRequest API, HTTP tűzfal a böngészőben).
+
+**Cél:** Kényelmesebb, gyorsabb böngészés, kevesebb zavaró elem, valamint részleges védelem trackelés és rosszindulatú reklámok ellen.
+
+## Aktuális ipari trendek a webes biztonságban
+
+Az elmúlt években rengeteg klasszikus webes támadás elleni védelmi megoldás beépült mindennapi fejlesztői eszközeinkbe és munkamódszereinkbe. Ennek eredményeként a legtöbb tipikus sebezhetőség már ritkán érinti a modern fejlesztésben résztvevőket. A trendek azt mutatják, hogy a keretrendszerek, automatizált tesztek és szerkesztők jelentős védelmet biztosítanak, ugyanakkor az új technológiák új támadási felületeket nyitnak meg.
+
+### Beépített védelmi intézkedések
+
+- **Keretrendszerek:** A népszerű frameworkök (pl. React, Angular, Laravel) natívan védik a fejlesztőt az XSS, CSRF, SQL injection típusú támadások egy jelentős része ellen.
+- **Template enginek:** Automatikusan helyesen generálják a HTML-t, kiszűrik a nem-biztonságos kódot, escape-elnek minden inputot.
+- **CORS:** Alapértelmezett mechanizmus a cross-site támadások ellen; csak engedélyezett domainről engedi a kommunikációt.
+- **Modern szerkesztők:** Figyelmeztetnek a hibás vagy sérülékeny megoldásokra, felhívják a figyelmet az elavult függőségekre.
+- **Verziókezelés:** Elengedhetetlen, az egyes verziók összehasonlítása segít behatárolni, mikor és hogyan került be egy sebezhetőség.
+- **Tesztelés:** Tisztában lehetünk az alkalmazás belső működésével, a 80/20 elv szerint a tesztelés lefedi a lehetséges problémák többségét.
+- **Tervezési minták:** MVC, MVP, MVVM architektúrák segítenek elkerülni a spagetti kódot, így megszűnnek bizonyos strukturális sebezhetőségek.
+- **API-first szemlélet:** A front- és backend fejlesztése párhuzamosan indul; a jól dokumentált API segít az egyértelmű kommunikációban.
 
 
+### Webes szolgáltatások
+
+- **OAuth, OpenID:** Nagy cégek kiforrott, auditált megoldásai; a saját fejlesztés általában kockázatosabb, de ha egyszer hibás lesz egy globális rendszer, az milliókat érinthet egyszerre.
+- **Külső hitelesítés:** A FIDO2 és hardveres kulcs alapú autentikáció egyre gyakoribb. Az OTP (one-time password) és kétfaktorú azonosítás már ipari sztenderd.
 
 
+## Esettanulmányok
+
+- **FB SMS 2FA Bypass (2023):** Egy hiba lehetővé tette, hogy a támadó megkerülje a Facebook SMS-alapú kétfaktoros hitelesítést.
+- **Bug bounty programok:** Szakértők legális keretek között törhetik fel rendszereket, a hibát bejelentve pénzt kapnak. Ez ösztönzi a proaktív sebezhetőség keresést.
+- **Apache Path Traversal RCE:** Path traversal hibánál lehetőség nyílt távoli kód futtatásra a szerveren.
+- **SLN fertőzés:** Fájlalapú malware, amely Visual Studio .sln fájlokat módosít.
+- **Zero day exploitok:** Ezek olyan hibák, amelyekre még nincs javítás, így minden rendszert érinthetnek, függetlenül a keretrendszertől vagy gyakorlattól.
 
 
+## Ipari trendek összefoglalása
 
+- Automatizált védelmek: Frissítő rendszerek, automata patch-elés.
+- Zero trust (Zéró bizalom) stratégia: Minden kapcsolat, felhasználó, alkalmazás ellenőrzése minden interakciónál.
+- Szoftver megfelelőség: GDPR, NIS2, ISO szabványok betartása.
+- Felhőszolgáltatások: Egyre több támadás éri a nem megfelelően konfigurált cloud szolgáltatásokat.
+- Adatvédelem: Személyre szabás mellett az adatvédelmi szabályozások szigorítása kulcsfontosságú.
+- AI-vezérelt védelem: Mesterséges intelligenciával támogatott elemzés, predikció és támadásdetektálás.
+- Web3, blokklánc: Decentralizált alkalmazások, kriptopénztárcák védelme új fejezetet nyit a biztonságban.
 
-
-
-
+A modern fejlesztés nagy előnye, hogy a mindennapi és leghatékonyabb védekezési módszerek szinte láthatatlanul beépültek, de az iparban gyorsan változó technológia miatt mindig érdemes naprakészen követni az újabb trendeket és hibákat.
